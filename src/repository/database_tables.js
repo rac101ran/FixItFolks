@@ -8,8 +8,6 @@ class TableCreation {
             ( 
                 item_name VARCHAR(50),
                 item_id INT PRIMARY KEY,
-                min_price INT,
-                max_price INT,
                 image_url VARCHAR(200)    
             )
         `)];
