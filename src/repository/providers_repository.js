@@ -13,16 +13,16 @@ class Providers {
     static async verifyItemService(provider_username, item_id) {
         try {
             const response = await pool.query('SELECT * from providers WHERE provider_username = ? AND provider_item = ?', [provider_username, item_id]);
-            return { 'status': response === undefined || response.length === 0 ? "OK" : "BAD" };
+            return { 'status': response === undefined || response.length === 0 ? "BAD" : "OK" , 'data' : response};
         } catch (err) {
-            return { 'status': 'BAD' };
+            return { 'status': "BAD" };
         }
     }
 
-    static async createProvider(provider_title, provider_username, provider_password, landmark, address, phone_number, provider_item, min_price, max_price) {
+    static async createProvider(provider_title, provider_username, provider_password, landmark, address, phone_number, provider_item, min_price, max_price, in_service) {
         try {
-            const response = await pool.query('INSERT INTO providers (provider_title,provider_username,provider_password,landmark,address,phone_number,provider_item,min_price,max_price) VALUES (?,?,?,?,?,?,?)', [provider_title,
-                provider_username, provider_password, landmark, address, phone_number, provider_item, min_price, max_price]);
+            const response = await pool.query('INSERT INTO providers (provider_title,provider_username,provider_password,landmark,address,phone_number,provider_item,min_price,max_price,in_service) VALUES (?,?,?,?,?,?,?,?)', [provider_title,
+                provider_username, provider_password, landmark, address, phone_number, provider_item, min_price, max_price, in_service]);
             return { 'status': "OK" };
         } catch (err) {
             return { 'status': "BAD" };

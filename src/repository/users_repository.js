@@ -34,7 +34,7 @@ export class UserEvents {
     static async addUserInformation(address, landmark, user_name) {
         try {
             const result = await pool.query('UPDATE users SET address = ? , landmark = ? WHERE user_name = ?', [address, landmark, user_name])
-            return { 'data': result, 'status': result === undefined ? "BAD" : "OK" };
+            return { 'data': result, 'status': result.changedRows === 1 ? "OK" : "BAD" };
         } catch (err) {
             console.error("error :", err)
             return { 'message': err, 'status': 'BAD' };
