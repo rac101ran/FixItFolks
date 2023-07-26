@@ -1,6 +1,6 @@
 import pool from '../databases/database.js'
 
-class Providers {
+export class Providers {
     static async verifyProvider(provider_username, provider_title) {
         try {
             const response = await pool.query('SELECT * FROM providers WHERE provider_username = ? AND provider_title = ?'[provider_username, provider_title]);
@@ -10,10 +10,22 @@ class Providers {
             return { 'status': "BAD" }
         }
     }
+
+    static async verifyProviderLogin(user_name, password) {
+        try {
+            const result = await pool.query('select * from users WHERE provider_username = ? AND provider_password = ?'[user_name, password])
+            return { 'data': result, 'status': result === undefined ? "BAD" : "OK" };
+        } catch (err) {
+            console.error("error: ", err)
+            return { 'message': err, 'status': 'BAD' };
+        }
+    }
+
+
     static async verifyItemService(provider_username, item_id) {
         try {
             const response = await pool.query('SELECT * from providers WHERE provider_username = ? AND provider_item = ?', [provider_username, item_id]);
-            return { 'status': response === undefined || response.length === 0 ? "BAD" : "OK" , 'data' : response};
+            return { 'status': response === undefined || response.length === 0 ? "BAD" : "OK", 'data': response };
         } catch (err) {
             return { 'status': "BAD" };
         }
@@ -23,27 +35,9 @@ class Providers {
         try {
             const response = await pool.query('INSERT INTO providers (provider_title,provider_username,provider_password,landmark,address,phone_number,provider_item,min_price,max_price,in_service) VALUES (?,?,?,?,?,?,?,?)', [provider_title,
                 provider_username, provider_password, landmark, address, phone_number, provider_item, min_price, max_price, in_service]);
-            return { 'status': "OK" };
+            return { 'status': response.affectedRows == 1 ? "OK" : "BAD", 'data': response };
         } catch (err) {
             return { 'status': "BAD" };
         }
     }
-
-    static async addItemService(provider_username, provider_items) {
-        const { provider_title, provider_password, landmark, address, phone_number } = await pool.query("SELECT provider_title , provider_password , landmark , address , phone_number FROM providers WHERE provider_username = ?", [provider_username]);
-        let addedItems = 0
-        try {
-            for (let item = 0; item < provider_items.length; item++) {
-                if ((await this.verifyItemService(provider_username, provider_items[item][0])).status === "OK") {
-                    const response = await this.createProvider(provider_title, provider_username, provider_password, landmark, address, phone_number, provider_items[item][0], provider_items[item][1], provider_items[item][2]);
-                    addedItems++;
-                }
-            }
-            return { 'status': "OK", 'data': { 'addedItems': addedItems } };
-        } catch (err) {
-            console.log("error :", err);
-            return { 'status': "BAD", 'data': {} };
-        }
-    }
-
 }
