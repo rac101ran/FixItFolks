@@ -1,2 +1,2 @@
 # FixItFolks
-creating a fixing/replacement service for home appliances , furniture etc.
+creating a fixing & replacement service for household entities etc.
