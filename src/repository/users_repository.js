@@ -1,7 +1,7 @@
 import pool from '../databases/database.js'
 
 
-class UserEvents {
+export class UserEvents {
     static async validateSignUpUser(user_name, password) {
         const [row] = await pool.query('select * from users where user_name = ?', [user_name])
         if (row === undefined && password.length >= 8) {
@@ -14,7 +14,7 @@ class UserEvents {
     static async createUser(user_name, password, phone_number, name) {
         try {
             const result = await pool.query('INSERT INTO users (name,user_name,password,phone_num) VALUES (?,?,?,?)', [name, user_name, password, phone_number])
-            return { 'data': result, 'status': result === undefined ? "BAD" : "OK" };
+            return { 'data': result, 'status': result.affectedRows === 0 ? "BAD" : "OK" };
         } catch (err) {
             console.error("error: ", err)
             return { 'message': err, 'status': 'BAD' };
@@ -41,8 +41,6 @@ class UserEvents {
         }
     }
 }
-
-
 
 
 
