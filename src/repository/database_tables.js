@@ -45,7 +45,9 @@ class TableCreation {
             CREATE TABLE IF NOT EXISTS providers   
             (
                 provider_id INT PRIMARY KEY,
-                provider_name VARCHAR(50),
+                provider_title VARCHAR(50),
+                provider_username VARCHAR(50),
+                provider_password VARCHAR(50),
                 landmark VARCHAR(50),
                 address VARCHAR(50),
                 phone_number INT(10),
@@ -71,6 +73,7 @@ class TableCreation {
             )
         `)];
     }
+
 }
 
 export default TableCreation;

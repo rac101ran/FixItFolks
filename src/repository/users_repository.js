@@ -39,7 +39,6 @@ class UserEvents {
             console.error("error :", err)
             return { 'message': err, 'status': 'BAD' };
         }
-
     }
 }
 
