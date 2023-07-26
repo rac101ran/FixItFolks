@@ -47,13 +47,3 @@ class Providers {
     }
 
 }
-
-// provider_id INT PRIMARY KEY,
-// provider_title VARCHAR(50),
-// provider_username VARCHAR(50),
-// provider_password VARCHAR(50),
-// landmark VARCHAR(50),
-// address VARCHAR(50),
-// phone_number INT(10),
-// provider_item INT,
-// FOREIGN KEY (provider_item) REFERENCES items(item_id) 

@@ -1,7 +1,7 @@
 import pool from '../databases/database.js'
 
 
-class TableCreation {
+class FixItFolksTables {
     static async createItemTable() {
         return [await pool.query(`
             CREATE TABLE IF NOT EXISTS items
@@ -76,4 +76,4 @@ class TableCreation {
 
 }
 
-export default TableCreation;
+export default FixItFolksTables;
