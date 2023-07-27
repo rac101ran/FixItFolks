@@ -22,5 +22,3 @@ export class CustomerEvents {
         }
     }
 }
-
-export default CustomerEvents;
