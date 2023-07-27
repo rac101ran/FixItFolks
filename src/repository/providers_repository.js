@@ -40,4 +40,23 @@ export class Providers {
             return { 'status': "BAD" };
         }
     }
+
+    static async getProvidersForItem(provider_item) {
+        try {
+            const [provider_rows] = await pool.query("SELECT provider_title , address , landmark , phone_number , min_price , max_price FROM providers WHERE provider_item = ? AND in_service = ?", [provider_item, 'YES']);
+            return provider_rows;
+        } catch (err) {
+            console.log("error: ",err);
+            return [];
+        }
+    }
+    static async getProviderForPriceRange(provider_item , min_range , max_range) {
+        try {
+            const [provider_rows] = await pool.query("SELECT provider_title , address , landmark , phone_number , min_price , max_price FROM providers WHERE provider_item = ? AND min_price <= ? AND max_price >= ?",[provider_item,min_range,max_range])
+            return provider_rows;
+        }catch(err) {
+            return [];
+        }
+    }
+
 }

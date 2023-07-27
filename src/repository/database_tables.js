@@ -21,6 +21,10 @@ export class FixItFolksTables {
                 user_id INT PRIMARY KEY,
                 username VARCHAR(30), 
                 password VARCHAR(20),
+                phone_num INT,
+                history INT,
+                landmark varchar(200),
+                address varchar(200),
             )
         `)];
     }
@@ -31,9 +35,6 @@ export class FixItFolksTables {
                 id INT PRIMARY KEY,
                 customer_id INT,
                 fixing_item INT,
-                history INT,
-                customer_landmark TEXT,
-                customer_address TEXT,
                 FOREIGN KEY (customer_id) REFERENCES users(user_id),
                 FOREIGN KEY (fixing_item) REFERENCES items(item_id)
             )
@@ -52,6 +53,9 @@ export class FixItFolksTables {
                 address VARCHAR(50),
                 phone_number INT(10),
                 provider_item INT,
+                min_price INT,
+                max_price INT,
+                in_service VARCHAR(3),
                 FOREIGN KEY (provider_item) REFERENCES items(item_id) 
             )
         `)];
