@@ -1,14 +1,8 @@
 import express from 'express';
 
-
 import { Server } from 'socket.io'
 import http from 'http'
 import cors from 'cors';
-
-
-
-
-
 
 import { SignUpUser, LoginUser, UserInfo } from './api_views/user_apis.js'
 import { CustomerItemCreation } from './api_views/customer_apis.js'
@@ -22,7 +16,6 @@ const io = new Server(socket_server);
 
 app.use(express.json());
 app.use(cors())
-
 
 
 // users API 
@@ -42,7 +35,6 @@ app.get('/service-provider/price-range', GetProvidersForPriceRange);
 
 // items API
 app.post('/items/add', AddItem);
-
 
 
 io.on("connection", socket => {
