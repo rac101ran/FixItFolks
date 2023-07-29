@@ -18,10 +18,10 @@ export class FixItFolksTables {
             CREATE TABLE IF NOT EXISTS users 
             (  
                 name VARCHAR(30),
-                user_id INT PRIMARY KEY,
+                user_id INT AUTO_INCREMENT PRIMARY KEY,
                 username VARCHAR(30), 
                 password VARCHAR(20),
-                phone_num INT,
+                phone_number TEXT,
                 history INT,
                 landmark varchar(200),
                 address varchar(200),
@@ -32,7 +32,7 @@ export class FixItFolksTables {
     static async createCustomerTable() {
         return [await pool.query(`
             CREATE TABLE IF NOT EXISTS customers (
-                id INT PRIMARY KEY,
+                id INT AUTO_INCREMENT PRIMARY KEY,
                 customer_id INT,
                 fixing_item INT,
                 FOREIGN KEY (customer_id) REFERENCES users(user_id),
@@ -45,13 +45,13 @@ export class FixItFolksTables {
         return [await pool.query(`
             CREATE TABLE IF NOT EXISTS providers   
             (
-                provider_id INT PRIMARY KEY,
+                provider_id INT AUTO_INCREMENT PRIMARY KEY,
                 provider_title VARCHAR(50),
                 provider_username VARCHAR(50),
                 provider_password VARCHAR(50),
                 landmark VARCHAR(50),
                 address VARCHAR(50),
-                phone_number INT(10),
+                phone_number TEXT,
                 provider_item INT,
                 min_price INT,
                 max_price INT,
@@ -65,13 +65,13 @@ export class FixItFolksTables {
         return [await pool.query(`
             CREATE TABLE IF NOT EXISTS current_event  
             (
-                event_id INT PRIMARY KEY,
+                event_id INT AUTO_INCREMENT PRIMARY KEY,
                 event_consumer_id INT,
                 event_provider_id INT,
                 event_item_id INT,
                 status VARCHAR(255),
                 event_timestamp VARCHAR(100),
-                FOREIGN KEY (event_consumer_id) REFERENCES users(user_id),
+                FOREIGN KEY (event_consumer_id) REFERENCES consumers(id),
                 FOREIGN KEY (event_provider_id) REFERENCES providers(provider_id),
                 FOREIGN KEY (event_item_id) REFERENCES items(item_id) 
             )
@@ -79,18 +79,3 @@ export class FixItFolksTables {
     }
 
 }
-
-
-// ALTER TABLE event_consumer_id ADD COLUMN customer_id INT,
-// ALTER TABLE customers FOREIGN KEY (customer_id) REFERENCES users (user_id) ON DELETE CASCADE;
-
-// // ALTER TABLE current_event DROP COLUMN event_consumer_id;
-
-// ALTER TABLE current_event
-// ADD CONSTRAINT current_event_ibfk_2
-// FOREIGN KEY (event_provider_id) REFERENCES providers(provider_id)
-// ON DELETE CASCADE;
-
-
-// ALTER TABLE current_event DROP FOREIGN KEY customers_ibfk_2;
-
