@@ -48,7 +48,7 @@ app.post('/items/add', AddItem);
 io.on("connection", socket => {
     console.log("connection: ");
     // customer places a request for the provider , request event name is established by => 'CUSTOMER_REQUEST - CUSTOMER_ID - PROVIDER_ID' 
-    socket.on("CUSTOMER_REQUEST", (data) => {
+    socket.on(/^CUSTOMER_REQUEST - (\d+) - (\d+)$/, (data) => {
         // provider listens the service order requests emitted by customers
         console.log(data);
         socket.broadcast.emit(`SERVICE_REQUEST - ${data.provider.provider_id}`, data);
