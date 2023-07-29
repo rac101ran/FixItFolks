@@ -79,3 +79,18 @@ export class FixItFolksTables {
     }
 
 }
+
+
+// ALTER TABLE event_consumer_id ADD COLUMN customer_id INT,
+// ALTER TABLE customers FOREIGN KEY (customer_id) REFERENCES users (user_id) ON DELETE CASCADE;
+
+// // ALTER TABLE current_event DROP COLUMN event_consumer_id;
+
+// ALTER TABLE current_event
+// ADD CONSTRAINT current_event_ibfk_2
+// FOREIGN KEY (event_provider_id) REFERENCES providers(provider_id)
+// ON DELETE CASCADE;
+
+
+// ALTER TABLE current_event DROP FOREIGN KEY customers_ibfk_2;
+

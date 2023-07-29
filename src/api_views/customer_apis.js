@@ -2,18 +2,16 @@ import { Items } from '../repository/items_repository.js'
 import { CustomerEvents } from '../repository/customer_repository.js'
 
 
-
-
-
 export async function CustomerItemCreation(req, res) {
     let createdCustomerItems = 0;
     try {
-        for (let item = 0; item < req.fixing_items.length; item++) {
-            if (((await Items.verifyItem(req.fixing_items[item])).status === "OK") && (await CustomerEvents.verifyCustomerForCreation(req.customer_id, req.fixing_items[item]))) {
-                if ((await CustomerEvents.createCustomer(req.customer_id, req.fixing_items[item])).status === "OK") {
+        for (let item = 0; item < req.body.fixing_items.length; item++) {
+            if (((await Items.verifyItem(req.body.fixing_items[item])).status === "OK") && (await CustomerEvents.verifyCustomerForCreation(req.body.customer_id, req.body.fixing_items[item]))) {
+                if ((await CustomerEvents.createCustomer(req.body.customer_id, req.body.fixing_items[item])).status === "OK") {
                     createdCustomerItems++;
                 }
             } else {
+                console.log("user maybe already taking this service or item not present")
                 continue;
             }
         }
