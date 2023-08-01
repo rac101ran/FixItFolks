@@ -8,6 +8,7 @@ import { SignUpUser, LoginUser, UserInfo } from './api_views/user_apis.js'
 import { CustomerItemCreation } from './api_views/customer_apis.js'
 import { ProviderSignUp, ProviderServiceAddition, ProviderLogin, GetProvidersForPriceRange, GetProvidersForService } from './api_views/provider_apis.js'
 import { AddItem, AllServices } from './api_views/item_apis.js'
+import { CreateEvent, UpdateEvent } from './api_views/events_apis.js'
 
 const app = express();
 const socket_server = http.createServer(app);
@@ -37,18 +38,32 @@ app.get('/service-provider/price-range', GetProvidersForPriceRange);
 app.post('/items/add', AddItem);
 app.get('/items/all', AllServices);
 
+
+// event services API
+app.post('/service-event/add', CreateEvent);
+app.post('/service-event/update', UpdateEvent);
+
+
 io.on("connection", (socket) => {
     console.log("connection: ");
     // customer places a request for the provider , request event name is established by => 'CUSTOMER_REQUEST - CUSTOMER_ID - PROVIDER_ID' 
     socket.on("CUSTOMER_REQUEST", (data) => {
 
-        socket.emit(`SERVICE_REQUEST:${data.provider.providerID}`, data); // provider listens the request 
+        try {
+            socket.emit(`SERVICE_REQUEST:${data.provider.providerID}`, data); // provider listens the request 
+        } catch (err) {
+            console.log(err);
+        }
+
     });
 
     // provider accepts the request for customers , creates unique events by => 'PROVIDER_ACCEPTED'
     socket.on("PROVIDER_ACCEPTED", (data) => {
-
-        socket.emit(`ACCEPTED_SERVICE:${data.customer.customerID}`, data);  // customer listens the accepted service emitted from the providers
+        try {
+            socket.emit(`ACCEPTED_SERVICE:${data.customer.customerID}`, data);  // customer listens the accepted service emitted from the providers
+        } catch (err) {
+            console.log(err);
+        }
     });
 });
 
