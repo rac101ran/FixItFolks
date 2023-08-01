@@ -9,6 +9,7 @@ import { CustomerItemCreation } from './api_views/customer_apis.js'
 import { ProviderSignUp, ProviderServiceAddition, ProviderLogin, GetProvidersForPriceRange, GetProvidersForService } from './api_views/provider_apis.js'
 import { AddItem, AllServices } from './api_views/item_apis.js'
 import { CreateEvent, UpdateEvent } from './api_views/events_apis.js'
+import { verifyJWT } from './utils/jwt_auth.js'
 
 const app = express();
 const socket_server = http.createServer(app);
@@ -21,16 +22,16 @@ app.use(cors())
 
 // users API 
 app.post('/users/signup', SignUpUser);
-app.post('/users/login', LoginUser);
-app.post('/users/user_info', UserInfo);
+app.post('/users/login', verifyJWT, LoginUser);
+app.post('/users/user_info', verifyJWT, UserInfo);
 
 // customers API 
-app.post('/customer-item-creation', CustomerItemCreation);
+app.post('/customer-item-creation', verifyJWT, CustomerItemCreation);
 
 // providers API 
 app.post('/provider/signup', ProviderSignUp);
-app.post('/provider/login', ProviderLogin);
-app.post('/provider/add-service-item', ProviderServiceAddition);
+app.post('/provider/login', verifyJWT, ProviderLogin);
+app.post('/provider/add-service-item', verifyJWT, ProviderServiceAddition);
 app.get('/service-provider', GetProvidersForService);
 app.get('/service-provider/price-range', GetProvidersForPriceRange);
 

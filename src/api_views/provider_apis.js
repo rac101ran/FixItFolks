@@ -1,6 +1,9 @@
 import { Items } from '../repository/items_repository.js'
 import { Providers } from '../repository/providers_repository.js'
 
+import jsonwebtoken from 'jsonwebtoken'
+import dotenv from 'dotenv'
+dotenv.config()
 
 // provider sign up API
 export async function ProviderSignUp(req, res) {
@@ -27,7 +30,10 @@ export async function ProviderSignUp(req, res) {
 export async function ProviderLogin(req, res) {
     try {
         if ((await Providers.verifyProviderLogin(req.body.provider_username, req.body.provider_password)).status === "OK") {
-            res.status(200).json({ 'status': "success", 'message': "provider logged in" });
+
+            const token = jsonwebtoken.sign({ user_name: req.body.user_name }, process.env.SECRET_ACCESS_TOKEN, { expiresIn: '1h' });
+
+            res.status(200).json({ 'status': "success", 'message': "provider logged in", 'token': token });
         } else {
             res.status(404).json({ 'status': "failure", 'message': "invalid credentials" });
         }

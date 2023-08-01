@@ -1,6 +1,8 @@
 
 import { UserEvents } from '../repository/users_repository.js'
 import jsonwebtoken from 'jsonwebtoken'
+import dotenv from 'dotenv'
+dotenv.config()
 
 // sign up API 
 export async function SignUpUser(req, res) {
@@ -25,10 +27,12 @@ export async function SignUpUser(req, res) {
 
 // login API 
 export async function LoginUser(req, res) {
-    console.log("LOGIN API")
     try {
         if ((await UserEvents.verifyUserLogin(req.body.user_name, req.body.password)).status === "OK") {
-            res.status(200).json({ 'status': "success", 'message': "user logged in" });
+
+            const token = jsonwebtoken.sign({ user_name: req.body.user_name }, process.env.SECRET_ACCESS_TOKEN, { expiresIn: '1h' });
+
+            res.status(200).json({ 'status': "success", 'message': "user logged in", 'token': token });
         } else {
             res.status(404).json({ 'status': "failure", 'message': "invalid credentials" });
         }
@@ -54,3 +58,4 @@ export async function UserInfo(req, res) {
         res.status(500).json({ 'status': "failure", 'message': "internal server error" });
     }
 }
+
