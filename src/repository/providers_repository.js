@@ -49,18 +49,26 @@ export class Providers {
     static async getProvidersForItem(provider_item) {
         try {
             const [provider_rows] = await pool.query("SELECT provider_title , address , landmark , phone_number , min_price , max_price FROM providers WHERE provider_item = ? AND in_service = ?", [provider_item, 'YES']);
-            return provider_rows;
+            return provider_rows === undefined ? [] : provider_rows;
         } catch (err) {
             return [];
         }
     }
     static async getProviderForPriceRange(provider_item, min_range, max_range) {
         try {
-            const [provider_rows] = await pool.query("SELECT provider_title , address , landmark , phone_number , min_price , max_price FROM providers WHERE provider_item = ? AND min_price <= ? AND max_price >= ?", [provider_item, min_range, max_range])
-            return provider_rows;
+            const [provider_rows] = await pool.query("SELECT provider_title , address , landmark , phone_number , min_price , max_price FROM providers WHERE provider_item = ? AND min_price <= ? AND max_price >= ? AND in_service = ?", [provider_item, min_range, max_range, "YES"])
+            return provider_rows === undefined ? [] : provider_rows
         } catch (err) {
             return [];
         }
     }
 
+    static async getProvidersWithLowestCost(provider_item) {
+        try {
+            const [provider_rows] = await pool.query("SELECT provider_title , address , landmark , phone_number , min_price , max_price FROM providers WHERE provider_item = ? AND in_service = ? ORDER BY min_price", [provider_item, "YES"]);
+            return provider_rows === undefined ? [] : provider_rows
+        } catch (err) {
+            return [];
+        }
+    }
 }

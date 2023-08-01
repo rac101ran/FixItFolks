@@ -21,7 +21,8 @@
     "mongoose": "^7.4.1",
     "mysql2": "^3.5.2",
     "socket.io": "^4.7.1",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "ws": "^8.13.0"
   },
   "devDependencies": {
     "@types/node": "^20.4.4",

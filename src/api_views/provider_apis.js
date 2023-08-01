@@ -2,7 +2,6 @@ import { Items } from '../repository/items_repository.js'
 import { Providers } from '../repository/providers_repository.js'
 
 
-
 // provider sign up API
 export async function ProviderSignUp(req, res) {
     try {
@@ -86,5 +85,14 @@ export async function GetProvidersForPriceRange(req, res) {
         res.status(200).json({ 'status': "success", 'data': { 'providers': Providers.getProviderForPriceRange(req.body.provider_item, req.body.min_price, req.body.max_price) } });
     } catch (err) {
         res.status(500).json({ 'status': "failure", 'data': { 'providers': Providers.getProviderForPriceRange(req.body.provider_item, req.body.min_price, req.body.max_price) } });
+    }
+}
+
+// providers for a particular service with low costs
+export async function GetProvidersByLowestPrice(req, res) {
+    try {
+        res.status(200).json({ 'status': "success", 'data': { 'providers': Providers.getProvidersWithLowestCost(req.body.provider_item) } });
+    } catch (err) {
+        res.status(500).json({ 'status': "failure", 'data': { 'providers': Providers.getProvidersWithLowestCost(req.body.provider_item) } });
     }
 }

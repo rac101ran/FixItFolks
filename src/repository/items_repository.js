@@ -27,4 +27,13 @@ export class Items {
         }
     }
 
+    static async getAllServiceItems() {
+        try {
+            const [rows] = await pool.query('SELECT * FROM items');
+            return rows;
+        } catch (err) {
+            return [];
+        }
+    }
+
 }

@@ -21,4 +21,12 @@ export async function AddItem(req, res) {
     } catch (err) {
         res.status(500).json({ 'status': "failure", 'message': "internal server error" });
     }
-} 
+}
+
+export async function AllServices(req, res) {
+    try {
+        res.status(200).json({ 'status': 200, 'data': Items.getAllServiceItems() });
+    } catch (err) {
+        res.status(200).json({ 'status': 500, 'data': [] });
+    }
+}
