@@ -79,18 +79,18 @@ export async function ProviderServiceAddition(req, res) {
 // get all providers for a particular service
 export async function GetProvidersForService(req, res) {
     try {
-        res.status(200).json({ 'status': "success", 'data': { 'providers': Providers.getProvidersForItem(req.body.provider_item) } });
+        res.status(200).json({ 'status': "success", 'data': { 'providers': Providers.getProvidersForItem(req.query.provider_item) } });
     } catch (err) {
-        res.status(500).json({ 'status': "failure", 'data': { 'providers': Providers.getProvidersForItem(req.body.provider_item) } });
+        res.status(500).json({ 'status': "failure", 'data': { 'providers': Providers.getProvidersForItem(req.query.provider_item) } });
     }
 }
 
 // get providers for a price range
 export async function GetProvidersForPriceRange(req, res) {
     try {
-        res.status(200).json({ 'status': "success", 'data': { 'providers': Providers.getProviderForPriceRange(req.body.provider_item, req.body.min_price, req.body.max_price) } });
+        res.status(200).json({ 'status': "success", 'data': { 'providers': Providers.getProviderForPriceRange(req.query.provider_item, req.query.min_price, req.query.max_price) } });
     } catch (err) {
-        res.status(500).json({ 'status': "failure", 'data': { 'providers': Providers.getProviderForPriceRange(req.body.provider_item, req.body.min_price, req.body.max_price) } });
+        res.status(500).json({ 'status': "failure", 'data': { 'providers': Providers.getProviderForPriceRange(req.query.provider_item, req.query.min_price, req.query.max_price) } });
     }
 }
 
