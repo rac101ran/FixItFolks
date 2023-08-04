@@ -47,8 +47,10 @@ export class Providers {
     }
 
     static async getProvidersForItem(provider_item) {
+        console.log(provider_item)
         try {
             const [provider_rows] = await pool.query("SELECT provider_title , address , landmark , phone_number , min_price , max_price FROM providers WHERE provider_item = ? AND in_service = ?", [provider_item, 'YES']);
+            console.log(provider_rows)
             return provider_rows === undefined ? [] : provider_rows;
         } catch (err) {
             return [];
