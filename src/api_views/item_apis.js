@@ -25,7 +25,16 @@ export async function AddItem(req, res) {
 
 export async function AllServices(req, res) {
     try {
-        res.status(200).json({ 'status': 200, 'data': Items.getAllServiceItems() });
+        res.status(200).json({ 'status': 200, 'data': await Items.getAllServiceItems() });
+    } catch (err) {
+        res.status(200).json({ 'status': 500, 'data': [] });
+    }
+}
+
+
+export async function AllItemsForService(req, res) {
+    try {
+        res.status(200).json({ 'status': 200, 'data': await Items.getAllItemsPerService(req.query.serviceId) });
     } catch (err) {
         res.status(200).json({ 'status': 500, 'data': [] });
     }

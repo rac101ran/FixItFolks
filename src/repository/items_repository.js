@@ -35,5 +35,14 @@ export class Items {
             return [];
         }
     }
+    static async getAllItemsPerService(serviceId) {
+        try {
+            const [rows] = await pool.query('SELECT item_name,item_id,service FROM items WHERE service = ?', [serviceId]);
+            console.log(rows)
+            return rows;
+        } catch (err) {
+            return [];
+        }
+    }
 
 }

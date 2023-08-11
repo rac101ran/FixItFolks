@@ -1,5 +1,11 @@
 import pool from '../databases/database.js'
 import bcrypt from 'bcrypt'
+
+import { join, dirname } from 'path';
+const __filename = new URL(import.meta.url).pathname;
+const __dirname = dirname(__filename);
+
+
 export class Providers {
     static async verifyProvider(provider_username, provider_title) {
         try {
@@ -49,9 +55,10 @@ export class Providers {
     static async getProvidersForItem(provider_item) {
         console.log(provider_item)
         try {
-            const [provider_rows] = await pool.query("SELECT provider_title , address , landmark , phone_number , min_price , max_price FROM providers WHERE provider_item = ? AND in_service = ?", [provider_item, 'YES']);
+            const [provider_rows] = await pool.query("SELECT provider_title , provider_username , address , landmark , phone_number , min_price , max_price , rating FROM providers WHERE provider_item = ? AND in_service = ?", [provider_item, 'YES']);
             console.log(provider_rows)
-            return provider_rows === undefined ? [] : provider_rows;
+            const [item_info] = await pool.query('SELECT item_name FROM items WHERE item_id = ?', [provider_item])
+            return provider_rows === undefined || item_info === undefined ? [] : { provider: provider_rows, services: item_info };
         } catch (err) {
             return [];
         }
@@ -73,4 +80,38 @@ export class Providers {
             return [];
         }
     }
+
+    static async getHighestRatedProviders() {
+        try {
+            let topProviders = 0;
+            const mp = new Map();
+            const [providersResult] = await pool.query('SELECT p1.provider_username, p1.provider_title, p1.address, p1.landmark, p1.phone_number, p1.min_price, p1.max_price, p1.rating FROM providers p1 ORDER BY rating DESC');
+            for (let i = 0; i < providersResult.length && topProviders < 10; i++) {
+                const user_name = providersResult[i].provider_username
+                if (mp.has(user_name) === false) {
+                    mp.set(user_name, providersResult[i])
+                    topProviders++;
+                }
+            }
+            const response = []
+            for (const [key, value] of mp) {
+                const items = []
+                const [items_response] = await pool.query('SELECT DISTINCT(ServiceCategory.service_name) FROM ServiceCategory WHERE ServiceCategory.service_id IN (SELECT items.service FROM items LEFT JOIN providers ON items.item_id = providers.provider_item WHERE providers.provider_username = ?)', [key])
+                console.log(items_response)
+                for (let i = 0; i < items_response.length; i++) items.push(items_response[i].service_name)
+                response.push({ provider: value, services: items });
+            }
+            return response
+        } catch (err) {
+            console.error("Error executing query:", err);
+            return []
+        }
+    }
+
 }
+
+
+
+
+
+

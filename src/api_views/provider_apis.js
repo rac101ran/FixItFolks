@@ -5,6 +5,7 @@ import jsonwebtoken from 'jsonwebtoken'
 import dotenv from 'dotenv'
 dotenv.config()
 
+
 // provider sign up API
 export async function ProviderSignUp(req, res) {
     try {
@@ -78,10 +79,11 @@ export async function ProviderServiceAddition(req, res) {
 
 // get all providers for a particular service
 export async function GetProvidersForService(req, res) {
+    // console.log("HIT")
     try {
-        res.status(200).json({ 'status': "success", 'data': { 'providers': await Providers.getProvidersForItem(req.query.provider_item) } });
+        res.status(200).json({ status: "success", data: { providers: await Providers.getProvidersForItem(req.query.provider_item) } });
     } catch (err) {
-        res.status(500).json({ 'status': "failure", 'data': { 'providers': await Providers.getProvidersForItem(req.query.provider_item) } });
+        res.status(500).json({ 'status': "failure", 'data': null });
     }
 }
 
@@ -90,7 +92,7 @@ export async function GetProvidersForPriceRange(req, res) {
     try {
         res.status(200).json({ 'status': "success", 'data': { 'providers': await Providers.getProviderForPriceRange(req.query.provider_item, req.query.min_price, req.query.max_price) } });
     } catch (err) {
-        res.status(500).json({ 'status': "failure", 'data': { 'providers': await Providers.getProviderForPriceRange(req.query.provider_item, req.query.min_price, req.query.max_price) } });
+        res.status(500).json({ 'status': "failure", 'data': null });
     }
 }
 
@@ -99,6 +101,14 @@ export async function GetProvidersByLowestPrice(req, res) {
     try {
         res.status(200).json({ 'status': "success", 'data': { 'providers': await Providers.getProvidersWithLowestCost(req.body.provider_item) } });
     } catch (err) {
-        res.status(500).json({ 'status': "failure", 'data': { 'providers': await Providers.getProvidersWithLowestCost(req.body.provider_item) } });
+        res.status(500).json({ 'status': "failure", 'data': null });
+    }
+}
+
+export async function HighestRatedProviders(req, res) {
+    try {
+        res.status(200).json({ 'status': "success", 'data': { 'providers': await Providers.getHighestRatedProviders() } });
+    } catch (err) {
+        res.status(500).json({ 'status': "failure", 'data': null });
     }
 }
