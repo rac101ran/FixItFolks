@@ -6,7 +6,7 @@ import cors from 'cors';
 
 import { SignUpUser, LoginUser, UserInfo } from './api_views/user_apis.js'
 import { CustomerItemCreation } from './api_views/customer_apis.js'
-import { ProviderSignUp, ProviderServiceAddition, ProviderLogin, GetProvidersForPriceRange, GetProvidersForService, HighestRatedProviders } from './api_views/provider_apis.js'
+import { ProviderSignUp, ProviderServiceAddition, ProviderLogin, GetProvidersForPriceRange, GetProvidersForService, HighestRatedProviders, GetProvidersByLowestPrice } from './api_views/provider_apis.js'
 import { AddItem, AllServices, AllItemsForService } from './api_views/item_apis.js'
 import { CreateEvent, UpdateEvent } from './api_views/events_apis.js'
 import { verifyJWT } from './utils/jwt_auth.js'
@@ -35,6 +35,7 @@ app.post('/provider/add-service-item', ProviderServiceAddition);
 app.get('/service-provider', GetProvidersForService);
 app.get('/service-provider/price-range', GetProvidersForPriceRange);
 app.get('/highest-rated-providers', HighestRatedProviders);
+app.get('/lowest-price', GetProvidersByLowestPrice);
 
 // items API
 app.post('/items/add', AddItem);
@@ -64,7 +65,7 @@ io.on("connection", (socket) => {
     // provider accepts the request for customers , creates unique events by => 'PROVIDER_ACCEPTED'
     socket.on("PROVIDER_ACCEPTED", (data) => {
         try {
-            socket.emit(`ACCEPTED_SERVICE:${data.customer.customerID}`, data);  // customer listens the accepted service emitted from the providers
+            io.emit(`ACCEPTED_SERVICE:${data.customer.customerID}`, data);  // customer listens the accepted service emitted from the providers
         } catch (err) {
             console.log(err);
         }

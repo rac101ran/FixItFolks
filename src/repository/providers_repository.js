@@ -56,7 +56,6 @@ export class Providers {
         console.log(provider_item)
         try {
             const [provider_rows] = await pool.query("SELECT provider_title , provider_username , address , landmark , phone_number , min_price , max_price , rating FROM providers WHERE provider_item = ? AND in_service = ?", [provider_item, 'YES']);
-            console.log(provider_rows)
             const [item_info] = await pool.query('SELECT item_name FROM items WHERE item_id = ?', [provider_item])
             return provider_rows === undefined || item_info === undefined ? [] : { provider: provider_rows, services: item_info };
         } catch (err) {
@@ -74,8 +73,9 @@ export class Providers {
 
     static async getProvidersWithLowestCost(provider_item) {
         try {
-            const [provider_rows] = await pool.query("SELECT provider_title , address , landmark , phone_number , min_price , max_price FROM providers WHERE provider_item = ? AND in_service = ? ORDER BY min_price", [provider_item, "YES"]);
-            return provider_rows === undefined ? [] : provider_rows
+            const [provider_rows] = await pool.query("SELECT provider_title , provider_username , rating , address , landmark , phone_number , min_price , max_price FROM providers WHERE provider_item = ? AND in_service = ? ORDER BY min_price", [provider_item, "YES"]);
+            const [item_info] = await pool.query('SELECT item_name FROM items WHERE item_id = ?', [provider_item])
+            return provider_rows === undefined || item_info === undefined ? [] : { provider: provider_rows, services: item_info };
         } catch (err) {
             return [];
         }

@@ -99,7 +99,7 @@ export async function GetProvidersForPriceRange(req, res) {
 // providers for a particular service with low costs
 export async function GetProvidersByLowestPrice(req, res) {
     try {
-        res.status(200).json({ 'status': "success", 'data': { 'providers': await Providers.getProvidersWithLowestCost(req.body.provider_item) } });
+        res.status(200).json({ 'status': "success", 'data': { 'providers': await Providers.getProvidersWithLowestCost(req.query.provider_item) } });
     } catch (err) {
         res.status(500).json({ 'status': "failure", 'data': null });
     }
