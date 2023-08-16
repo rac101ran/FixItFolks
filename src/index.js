@@ -22,8 +22,8 @@ app.use(cors())
 
 // users API 
 app.post('/users/signup', SignUpUser);
-app.post('/users/login', verifyJWT, LoginUser);
-app.post('/users/user_info', verifyJWT, UserInfo);
+app.get('/users/login', LoginUser);
+app.post('/users/user_info', UserInfo);
 
 // customers API 
 app.post('/customer-item-creation', verifyJWT, CustomerItemCreation);

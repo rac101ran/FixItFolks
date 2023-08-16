@@ -23,11 +23,12 @@ export class UserEvents {
 
     static async verifyUserLogin(user_name, password) {
         try {
-            const [result] = await pool.query('select username , password from users WHERE username = ? LIMIT 1', [user_name])
+            let [result] = await pool.query('select * from users WHERE username = ? LIMIT 1', [user_name])
             if (result === undefined || result.length === 0) {
                 return { 'data': result, 'status': "BAD" };
             } else {
                 const result_hash = await bcrypt.compare(password, result[0].password)
+                if (result_hash) result[0].password = password
                 return result_hash ? { 'status': "OK", 'data': result[0] } : { 'data': result[0], 'status': "BAD" };
             }
         } catch (err) {

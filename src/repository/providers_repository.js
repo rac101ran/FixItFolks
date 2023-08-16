@@ -55,7 +55,7 @@ export class Providers {
     static async getProvidersForItem(provider_item) {
         console.log(provider_item)
         try {
-            const [provider_rows] = await pool.query("SELECT provider_title , provider_username , address , landmark , phone_number , min_price , max_price , rating FROM providers WHERE provider_item = ? AND in_service = ?", [provider_item, 'YES']);
+            const [provider_rows] = await pool.query("SELECT provider_id , provider_title , provider_username , address , landmark , phone_number , min_price , max_price , rating , provider_item FROM providers WHERE provider_item = ? AND in_service = ?", [provider_item, 'YES']);
             const [item_info] = await pool.query('SELECT item_name FROM items WHERE item_id = ?', [provider_item])
             return provider_rows === undefined || item_info === undefined ? [] : { provider: provider_rows, services: item_info };
         } catch (err) {
@@ -96,7 +96,8 @@ export class Providers {
             const response = []
             for (const [key, value] of mp) {
                 const items = []
-                const [items_response] = await pool.query('SELECT DISTINCT(ServiceCategory.service_name) FROM ServiceCategory WHERE ServiceCategory.service_id IN (SELECT items.service FROM items LEFT JOIN providers ON items.item_id = providers.provider_item WHERE providers.provider_username = ?)', [key])
+                const [items_response] = await pool.query(`SELECT DISTINCT(ServiceCategory.service_name) FROM ServiceCategory 
+                WHERE ServiceCategory.service_id IN (SELECT items.service FROM items LEFT JOIN providers ON items.item_id = providers.provider_item WHERE providers.provider_username = ?)`, [key])
                 console.log(items_response)
                 for (let i = 0; i < items_response.length; i++) items.push(items_response[i].service_name)
                 response.push({ provider: value, services: items });
