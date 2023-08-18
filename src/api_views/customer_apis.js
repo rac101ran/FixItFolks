@@ -18,10 +18,11 @@ export async function CustomerItemCreation(req, res) {
         if (createdCustomerItems > 0) {
             res.status(201).json({ 'status': "success", 'data': { 'created_customers_item': createdCustomerItems }, 'message': "customer items created" });
         } else {
-            res.status(404).json({ 'status': "failure", 'data': {}, 'message': "no customer item created" });
+            res.status(200).json({ 'status': "success", 'data': { 'created_customers_item': 0 }, 'message': "no customer item created" });
         }
     } catch (err) {
         res.status(500).json({ 'status': "failure", 'message': "internal server error" });
     }
 
 }
+
